@@ -10,13 +10,16 @@ from tensorflow.keras.models import load_model
 import mediapipe as mp
 
 # ────────────────────────── 경로 설정 ──────────────────────────
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # hand_tracking/정지수어
-STATIC_MODEL_PATH = os.path.join(BASE_DIR, "gesture_model.pkl")
-STATIC_ENCODER_PATH = os.path.join(BASE_DIR, "label_encoder.pkl")
+CURRENT_FILE_DIR = os.path.dirname(os.path.abspath(__file__))  # hand_tracking
+STATIC_DIR = os.path.join(CURRENT_FILE_DIR, "정지수어")
+DYNAMIC_DIR = os.path.join(CURRENT_FILE_DIR, "동적수어")
 
-DYNAMIC_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "동적수어"))
+STATIC_MODEL_PATH = os.path.join(STATIC_DIR, "gesture_model.pkl")
+STATIC_ENCODER_PATH = os.path.join(STATIC_DIR, "label_encoder.pkl")
+
 DYNAMIC_MODEL_PATH = os.path.join(DYNAMIC_DIR, "dynamic_gesture_model_lstm.h5")
 DYNAMIC_ENCODER_PATH = os.path.join(DYNAMIC_DIR, "label_encoder_lstm.pkl")
+
 
 # ────────────────────────── 모델 불러오기 ──────────────────────────
 static_model = joblib.load(STATIC_MODEL_PATH)
@@ -49,7 +52,7 @@ while cap.isOpened():
     if not ret:
         break
 
-    image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(image)
 
     label_stop = "None"
